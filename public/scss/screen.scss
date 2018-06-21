@@ -1,0 +1,71 @@
+/*All styles*/
+$blue-color: #05386B;
+$blue-lighter: #379683;
+$green-color: #5cdb95;
+$light-green: #8ee4af;
+$lighter-green: #edf5e1;
+$white-color: #fff;
+$black-color: #000;
+
+@import "bootstrap";
+
+@import "awesome/fontawesome";
+
+// @import "bs-select/bootstrap-select";
+
+select.bs-select-hidden, select.selectpicker{
+    display: block!important;
+}
+
+nav{
+    text-align: center;
+    ul{
+        padding-left: 0px;
+        li{
+            display: inline-block;
+            margin: 5px 8px;
+            a{
+                display: inline-block;
+                // background: $blue-lighter;
+                padding: 10px 15px;
+                color:$blue-color;
+                font-size: 16px;
+                // border: 1px solid $blue-lighter;
+                &:hover{
+                    color: $blue-lighter;
+                    // background: $white-color;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+.logged-person{
+    
+    display: block;
+}
+/*Button*/
+.btn{
+    margin-bottom: 10px;
+    &.btn-outline-success{
+        margin-bottom: 30px;
+    }
+}
+
+/*Form bellow header*/
+.form-inline{
+    margin-bottom: 30px !important;
+}
+h4{
+    margin-top: 20px;
+}
+
+header{
+    padding: 40px 0px;
+}
+
+
+/*Footer*/
+footer{
+    padding-top: 60px;
+}
