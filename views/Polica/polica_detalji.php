@@ -30,8 +30,8 @@ require 'views/dashboard/header.php';
                 <th><?php echo $i++; ?></th>
                 <td><?php echo $redovi['red_broj'] ?></td>
                 <td>
-                    <a href="<?php echo URL; ?>red/redDetalji/<?php echo $redovi['id']; ?>" class="btn btn-warning">Detalji</a>
-                    <a href="<?php echo URL; ?>red/izmenaReda/<?php echo $redovi['id']; ?>" class="btn btn-danger">Izmeni</a>
+                    <a href="<?php echo URL; ?>red/redDetalji/<?php echo $redovi['red_id']; ?>" class="btn btn-warning">Detalji</a>
+                    <a href="<?php echo URL; ?>red/izmenaReda/<?php echo $redovi['red_id']; ?>" class="btn btn-danger">Izmeni</a>
                 </td>
             </tr>
             <?php

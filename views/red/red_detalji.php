@@ -32,8 +32,8 @@ require 'views/dashboard/header.php';
                 <th scope="row"><?php echo $i++ ?></th>
                 <td><?php echo $sekcija['sekcija_broj'] ?></td>
                 <td>
-                    <a href="<?php echo URL; ?>sekcija/sekcijaDetalji/<?php echo $sekcija['id']; ?>" class="btn btn-warning">Detalji</a>
-                    <a href="<?php echo URL; ?>sekcija/izmenaSekcije/<?php echo $sekcija['id']; ?>" class="btn btn-danger">Izmeni</a>
+                    <a href="<?php echo URL; ?>sekcija/sekcijaDetalji/<?php echo $sekcija['sekcija_id']; ?>" class="btn btn-warning">Detalji</a>
+                    <a href="<?php echo URL; ?>sekcija/izmenaSekcije/<?php echo $sekcija['sekcija_id']; ?>" class="btn btn-danger">Izmeni</a>
                 </td>
             </tr>
             <?php

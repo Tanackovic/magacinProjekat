@@ -23,8 +23,8 @@ require 'views/dashboard/header.php';
             <td><?php echo $magacin['magacin_naziv']; ?></td>
             <td><?php echo $magacin['adresa']; ?></td>
             <td>
-                <a class="btn btn-warning" href="<?php echo URL; ?>magacin/magacinDetalji/<?php echo $magacin['id']; ?>">Detalji</a>
-                <a class="btn btn-danger" href="<?php echo URL; ?>magacin/izmenaMagacina/<?php echo $magacin['id']; ?>">Izmeni</a>
+                <a class="btn btn-warning" href="<?php echo URL; ?>magacin/magacinDetalji/<?php echo $magacin['magacin_id']; ?>">Detalji</a>
+                <a class="btn btn-danger" href="<?php echo URL; ?>magacin/izmenaMagacina/<?php echo $magacin['magacin_id']; ?>">Izmeni</a>
             </td>
         </tr>
         <?php

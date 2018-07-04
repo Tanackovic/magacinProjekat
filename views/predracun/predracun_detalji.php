@@ -11,7 +11,7 @@ require 'views/dashboard/header.php';
 <label><?php echo $this->predracun->predracun['delovodni_broj_otpremnice']; ?></label>
 <br/>
 <label>Datum</label>
-<label><?php echo $this->predracun->predracun['datum']; ?></label>
+<label><?php echo date('d/m/Y', strtotime($this->predracun->predracun['datum_at'])); ?></label>
 <br/>
 <label>Vreme lezanja</label>
 <label><?php echo $this->predracun->predracun['broj_dana']; ?> dana</label>
@@ -36,8 +36,8 @@ require 'views/dashboard/header.php';
     foreach ($this->predracun->stavke_predracuna as $stavke) {
         ?>    
         <tr>     
-            <td><?php echo date('d/m/Y', strtotime($stavke['datum_od'])); ?></td>
-            <td><?php echo date('d/m/Y', strtotime($stavke['datum_do'])); ?></td>            
+            <td><?php echo date('d/m/Y', strtotime($stavke['datum_od_at'])); ?></td>
+            <td><?php echo date('d/m/Y', strtotime($stavke['datum_do_at'])); ?></td>            
             <td><?php echo $stavke['cena_po_danu'] ?></td>            
             <td><?php echo $stavke['broj_dana'] ?></td>
             <td><?php echo $stavke['total_cena_za_dane'] ?></td>

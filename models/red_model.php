@@ -23,18 +23,17 @@ class Red_model extends Model {
     }
 
     function redDetalji($id) {
-        $statement = $this->db->prepare("SELECT r.*, po.id as polica_id, po.polica_broj, "
-                . "p.id as prostorija_id, p.prostorija_broj, m.id as magacin_id, m.magacin_naziv, m.adresa " 
-                . "FROM red r join polica po on po.id = r.polica_id "
-                . "join prostorija p on po.prostorija_id = p.id "
-                . "JOIN magacin m ON p.magacin_id = m.id "
-                . "WHERE r.id = :id ");
+        $statement = $this->db->prepare("SELECT * " 
+                . "FROM red r join polica po on po.polica_id = r.polica_id "
+                . "join prostorija p on po.prostorija_id = p.prostorija_id "
+                . "JOIN magacin m ON p.magacin_id = m.magacin_id "
+                . "WHERE r.red_id = :id ");
         $statement->execute(array(
             ':id' => $id
         ));
         if ($statement->rowCount() > 0) {
             $red = $statement->fetch();
-            $this->id = $red['id'];
+            $this->id = $red['red_id'];
             $this->broj = $red['red_broj'];
             $this->polica->id = $red['polica_id'];
             $this->polica->broj = $red['polica_broj'];
@@ -68,7 +67,7 @@ class Red_model extends Model {
     }
     
     function izmeniRed($red_id, $broj) {
-        $statement = $this->db->prepare("update red set red_broj = :broj where id = :red_id");
+        $statement = $this->db->prepare("update red set red_broj = :broj where red_id = :red_id");
         $result = $statement->execute(array(
             ':red_id' => $red_id,
             ':broj' => $broj
@@ -83,20 +82,20 @@ class Red_model extends Model {
     
     function izmeniAdresniKod($id) {
         $statement = $this->db->prepare("SELECT s.*, r.red_broj, po.polica_broj, p.prostorija_broj, m.magacin_naziv
-                FROM sekcija s JOIN red r ON s.`red_id`=r.id
-                JOIN polica po ON po.id = r.polica_id 
-                JOIN prostorija p ON po.prostorija_id = p.id 
-                JOIN magacin m ON p.magacin_id = m.id 
+                FROM sekcija s JOIN red r ON s.`red_id`=r.red_id
+                JOIN polica po ON po.polica_id = r.polica_id 
+                JOIN prostorija p ON po.prostorija_id = p.prostorija_id 
+                JOIN magacin m ON p.magacin_id = m.magacin_id 
                 WHERE r.id = :id ");
         $statement->execute(array(
             ':id' => $id
         ));
         $red = $statement->fetchAll();
         foreach ($red as $sekcija) {
-            $statement_novikod = $this->db->prepare("update sekcija set sekcija_adresni_kod = :adresni_kod where id = :id ");
+            $statement_novikod = $this->db->prepare("update sekcija set sekcija_adresni_kod = :adresni_kod where sekcija_id = :id ");
             $statement_novikod->execute(array(
                 ':adresni_kod' => $sekcija['magacin_naziv'] . ', ' . $sekcija['prostorija_broj'] . ', ' . $sekcija['polica_broj'] . ', ' . $sekcija['red_broj'] . ', ' . $sekcija['sekcija_broj'],
-                ':id' => $sekcija['id']
+                ':id' => $sekcija['sekcija_id']
             ));
         }
         return 1;

@@ -25,8 +25,8 @@ require 'views/dashboard/header.php';
                 <th scope="row"><?php echo $i++; ?></th>
                 <td><?php echo $polica['polica_broj'] ?></td>
                 <td>
-                    <a href="<?php echo URL; ?>polica/policaDetalji/<?php echo $polica['id']; ?>" class="btn btn-warning">Detalji</a>
-                    <a href="<?php echo URL; ?>polica/izmenaPolice/<?php echo $polica['id']; ?>" class="btn btn-danger">Izmeni</a>
+                    <a href="<?php echo URL; ?>polica/policaDetalji/<?php echo $polica['polica_id']; ?>" class="btn btn-warning">Detalji</a>
+                    <a href="<?php echo URL; ?>polica/izmenaPolice/<?php echo $polica['polica_id']; ?>" class="btn btn-danger">Izmeni</a>
                 </td>
                 
             </tr>

@@ -17,7 +17,7 @@ class Osoba_model extends Model{
     }
     
     function vratiSveOsobe(){
-        $statement = $this->db->prepare("SELECT id, ime, prezime, korisnicko_ime, uloga from osoba where status_osobe='1'");
+        $statement = $this->db->prepare("SELECT osoba_id, ime, prezime, korisnicko_ime, uloga from osoba where is_aktivna='1'");
         $statement->execute();
         if($statement->rowCount() > 0){
             $osoba = $statement->fetchAll();
@@ -35,7 +35,7 @@ class Osoba_model extends Model{
         if ($statement_postoji->rowCount() > 0){
             return 0;
         }else{
-            $statement_unesi = $this->db->prepare("INSERT into osoba (ime, prezime, korisnicko_ime, password, uloga, status_osobe) "
+            $statement_unesi = $this->db->prepare("INSERT into osoba (ime, prezime, korisnicko_ime, password, uloga, is_aktivna) "
                     . " values (:ime, :prezime, :korisnicko_ime, :password, :uloga, :status_osobe)");
             $result = $statement_unesi->execute(array(
                 ':ime' => $ime,
@@ -50,7 +50,7 @@ class Osoba_model extends Model{
     }
     
     function vratiOsobu($id){
-        $statement = $this->db->prepare("SELECT id, ime, prezime, korisnicko_ime, uloga from osoba where id= :id");
+        $statement = $this->db->prepare("SELECT osoba_id, ime, prezime, korisnicko_ime, uloga from osoba where osoba_id= :id");
         $statement->execute(array(
             ':id' => $id
         ));
@@ -63,7 +63,7 @@ class Osoba_model extends Model{
     }
     
     function arhivirajOsobu($id){
-        $statement = $this->db->prepare("update osoba set status_osobe = 0 where id = :id");
+        $statement = $this->db->prepare("update osoba set is_aktivna = 0 where osoba_id = :id");
         $result = $statement->execute(array(
             ':id' => $id
         ));

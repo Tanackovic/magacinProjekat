@@ -21,8 +21,8 @@ require 'views/dashboard/header.php';
             ?>
             <tr>
                 <th scope="row"><?php echo $i++; ?></th>
-                <th scope="row"><?php echo date('d/m/Y', strtotime($cena['datum_aktivacije'])); ?></th>
-                <th scope="row"><?php echo (date('d/m/Y', strtotime($cena['datum_deaktivacije'])) === '01/01/1970')? "":date('d/m/Y', strtotime($cena['datum_deaktivacije'])); ?></th>
+                <th scope="row"><?php echo date('d/m/Y', strtotime($cena['datum_aktivacije_at'])); ?></th>
+                <th scope="row"><?php echo (date('d/m/Y', strtotime($cena['datum_deaktivacije_at'])) === '01/01/1970')? "":date('d/m/Y', strtotime($cena['datum_deaktivacije_at'])); ?></th>
                 <th scope="row" class="price"><?php echo number_format($cena['cena'], 2); ?></th>
             </tr>
             <?php } ?>

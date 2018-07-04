@@ -23,7 +23,7 @@ require 'views/dashboard/header.php';
         <tbody>
             <tr>
                 <td><?php echo $this->prijemniList->prijemni_list_db;?></td>
-                <td><?php echo $this->prijemniList->prijemni_list_datum;?></td>
+                <td><?php echo date('d/m/Y', strtotime($this->prijemniList->prijemni_list_datum));?></td>
                 <td>
                     <p><?php echo $this->prijemniList->magacin_naziv;?></p><i class="fas fa-arrow-down"></i>
                     <p><?php echo $this->prijemniList->prostorija_broj;?></p><i class="fas fa-arrow-down"></i>

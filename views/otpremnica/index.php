@@ -22,9 +22,9 @@ require 'views/dashboard/header.php';
         <tr>     
             <td><?php echo $otpremnica['delovodni_broj_otpremnice']; ?></td>
             <td><?php echo $otpremnica['delovodni_broj_prijemnog_lista']; ?></td>
-            <td><?php echo $otpremnica['datum'] ?></td>            
+            <td><?php echo date('d/m/Y', strtotime($otpremnica['datum_at'])) ?></td>            
             <td><?php echo $otpremnica['vreme_lezanja_u_danima'] ?></td>
-            <td><a class="btn btn-warning" href="<?php echo URL;?>otpremnica/otpremnicaDetalji/<?php echo $otpremnica['id'];?>">Detalji</a></td>
+            <td><a class="btn btn-warning" href="<?php echo URL;?>otpremnica/otpremnicaDetalji/<?php echo $otpremnica['otpremni_list_id'];?>">Detalji</a></td>
         </tr>
         <?php
     }

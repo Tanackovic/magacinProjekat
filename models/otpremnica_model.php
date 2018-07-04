@@ -28,13 +28,13 @@ class Otpremnica_model extends Model
     }
     
     function otpremnicaDetalji($id){
-        $statement = $this->db->prepare("SELECT * from otpremni_list where id = :id");
+        $statement = $this->db->prepare("SELECT * from otpremni_list where otpremni_list_id = :id");
         $result = $statement->execute(array(
             ':id' => $id
         ));
         if($statement->rowCount() > 0 ){
             $this->otpremnica = $statement->fetch();
-            $statement = $this->db->prepare("SELECT * from stavka_otpremnice so join istorija_premestanja ip on ip.id = so.istorija_id "
+            $statement = $this->db->prepare("SELECT * from stavka_otpremnice so join istorija_premestanja ip on ip.istorija_premestanja_id = so.istorija_id "
                         . "where so.otpremnica_id = :id");
             $result = $statement->execute(array(
                 ':id' => $id

@@ -11,7 +11,7 @@ require 'views/dashboard/header.php';
     <label><?php echo $this->otpremnica->otpremnica['delovodni_broj_prijemnog_lista'];?></label>
     <br/>
     <label>Datum</label>
-    <label><?php echo $this->otpremnica->otpremnica['datum'];?></label>
+    <label><?php echo date('d/m/Y', strtotime($this->otpremnica->otpremnica['datum_at']));?></label>
     <br/>
     <label>Vreme lezanja</label>
     <label><?php echo $this->otpremnica->otpremnica['vreme_lezanja_u_danima'];?> dana</label>
@@ -32,7 +32,7 @@ require 'views/dashboard/header.php';
             foreach ($this->otpremnica->stavke_otpremnice as $stavke) {
         ?>    
             <tr>     
-                <td><?php echo date('d/m/Y', strtotime($stavke['datum_unosa'])); ?></td>
+                <td><?php echo date('d/m/Y', strtotime($stavke['datum_unosa_at'])); ?></td>
                 <td><?php echo $stavke['adr_kod_start'] ?></td>            
                 <td><?php echo $stavke['adr_kod_kraj'] ?></td>
                 <td><?php echo $stavke['ime'] . ' ' . $stavke['prezime'] ?></td>

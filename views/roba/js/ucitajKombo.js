@@ -15,7 +15,7 @@ function loadMagacin() {
                 $('#magacin').empty();
                 $('#magacin').append("<option value='0'>Izaberite magacin...</option>");
                 $.each(JSON.parse(data), function (i, item) {
-                    $('#magacin').append('<option value="' + item.id + '">' + item.magacin_naziv + '</option>');
+                    $('#magacin').append('<option value="' + item.magacin_id + '">' + item.magacin_naziv + '</option>');
                 });
             },
             error: function (text) {
@@ -36,7 +36,7 @@ function loadMagacin() {
                 $('#prostorija').empty();
                 $('#prostorija').append("<option value='0'>Izaberite prostoriju...</option>");
                 $.each(JSON.parse(data), function (i, item) {
-                    $('#prostorija').append('<option value="' + item.id + '">' + item.prostorija_broj + '</option>');
+                    $('#prostorija').append('<option value="' + item.prostorija_id + '">' + item.prostorija_broj + '</option>');
                 });
             },
             error: function (text) {
@@ -57,7 +57,7 @@ function loadMagacin() {
                 $('#polica').empty();
                 $('#polica').append("<option value='0'>Izaberite policu...</option>");
                 $.each(JSON.parse(data), function (i, item) {
-                    $('#polica').append('<option value="' + item.id + '">' + item.polica_broj + '</option>');
+                    $('#polica').append('<option value="' + item.polica_id + '">' + item.polica_broj + '</option>');
                 });
             },
             error: function (text) {
@@ -78,7 +78,7 @@ function loadMagacin() {
                 $('#red').empty();
                 $('#red').append("<option value='0'>Izaberite red...</option>");
                 $.each(JSON.parse(data), function (i, item) {
-                    $('#red').append('<option value="' + item.id + '">' + item.red_broj + '</option>');
+                    $('#red').append('<option value="' + item.red_id + '">' + item.red_broj + '</option>');
                 });
             },
             error: function (text) {
@@ -99,7 +99,7 @@ function loadMagacin() {
                 $('#sekcija').empty();
                 $('#sekcija').append("<option value='0'>Izaberite sekciju...</option>");
                 $.each(JSON.parse(data), function (i, item) {
-                    $('#sekcija').append('<option value="' + item.id + '">' + item.sekcija_broj + '</option>');
+                    $('#sekcija').append('<option value="' + item.sekcija_id + '">' + item.sekcija_broj + '</option>');
                 });
             },
             error: function (text) {

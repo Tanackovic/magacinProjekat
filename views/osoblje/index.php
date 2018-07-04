@@ -30,7 +30,7 @@ require 'views/dashboard/header.php';
                 <td>Radnik</td>
             <?php } ?>
             <td>
-                <a class="btn btn-warning" href="<?php echo URL; ?>osoba/arhivaOsobe/<?php echo $osoba['id']; ?>">Arhiviraj osobu</a>
+                <a class="btn btn-warning" href="<?php echo URL; ?>osoba/arhivaOsobe/<?php echo $osoba['osoba_id']; ?>">Arhiviraj osobu</a>
             </td>
         </tr>
         <?php

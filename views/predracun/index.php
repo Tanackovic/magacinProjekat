@@ -23,10 +23,10 @@ require 'views/dashboard/header.php';
         <tr>     
             <td><?php echo $predracun['jedinstveni_broj']; ?></td>
             <td><?php echo $predracun['delovodni_broj_otpremnice']; ?></td>
-            <td><?php echo $predracun['datum'] ?></td>            
+            <td><?php echo date('d/m/Y', strtotime($predracun['datum_at'])) ?></td>            
             <td><?php echo $predracun['broj_dana'] ?></td>
             <td><?php echo $predracun['totalna_suma'] ?></td>
-            <td><a class="btn btn-warning" href="<?php echo URL;?>predracun/predracunDetalji/<?php echo $predracun['id'];?>">Detalji</a></td>
+            <td><a class="btn btn-warning" href="<?php echo URL;?>predracun/predracunDetalji/<?php echo $predracun['predracun_id'];?>">Detalji</a></td>
         </tr>
         <?php
     }

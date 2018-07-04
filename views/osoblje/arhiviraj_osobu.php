@@ -7,7 +7,7 @@ require 'views/dashboard/header.php';
 </header>
 
 <form action="<?php echo URL; ?>osoba/arhivirajOsobu" method="post">
-    <input type="hidden" name="id" value="<?php echo $this->osoba['id'] ?>">
+    <input type="hidden" name="id" value="<?php echo $this->osoba['osoba_id'] ?>">
     <p>Osoba</p>
     <label>Ime: <?php echo $this->osoba['ime'] ?></label>
     <br/>

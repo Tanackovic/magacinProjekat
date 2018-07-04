@@ -41,7 +41,6 @@ class Cena extends MainController {
 
         $cena = doubleval(filter_input(INPUT_POST, 'cena'));     
         if (!empty($cena)) {  
-
             $result = $this->model->dodajCenu($cena);
             if ($result > 0) {
                 $this->index();

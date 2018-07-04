@@ -20,19 +20,19 @@ class Cena_model extends Model {
     function promeniCenu($cena) {
 
         $datum_aktivacije = date('Y-m-d', strtotime(date('Y-m-d') . ' +1 day'));
-        $statement = $this->db->prepare("SELECT * from cena where datum_aktivacije = :datum_aktivacije");
+        $statement = $this->db->prepare("SELECT * from cena where datum_aktivacije_at = :datum_aktivacije");
         $statement->execute(array(
             ':datum_aktivacije' => $datum_aktivacije
         ));
         if ($statement->rowCount() == 0) {
             $statement = $this->db->prepare("UPDATE cena 
-            SET datum_deaktivacije= :datum_deaktivacije
-            WHERE datum_deaktivacije IS NULL ");
+            SET datum_deaktivacije_at= :datum_deaktivacije
+            WHERE datum_deaktivacije_at IS NULL ");
             $result_update = $statement->execute(array(
                 ':datum_deaktivacije' => date('Y-m-d')
             ));
             if ($result_update > 0) {
-                $statement = $this->db->prepare("INSERT into cena (cena, datum_aktivacije) values (:cena, :datum_aktivacije)");
+                $statement = $this->db->prepare("INSERT into cena (cena_id, datum_aktivacije_at) values (:cena, :datum_aktivacije)");
                 $result = $statement->execute(array(
                     ':cena' => $cena,
                     ':datum_aktivacije' => $datum_aktivacije
@@ -47,8 +47,8 @@ class Cena_model extends Model {
             }
         }else{
             $statement = $this->db->prepare("UPDATE cena 
-            SET cena= :cena
-            WHERE datum_aktivacije = :datum_aktivacije");
+            SET cena_id= :cena
+            WHERE datum_aktivacije_at = :datum_aktivacije");
             $result_update = $statement->execute(array(
                 ':cena' => $cena,
                 ':datum_aktivacije' => $datum_aktivacije
@@ -63,7 +63,7 @@ class Cena_model extends Model {
 
     function dodajCenu($cena) {
 
-        $statement = $this->db->prepare("INSERT into cena (cena, datum_aktivacije) values (:cena, :datum_aktivacije)");
+        $statement = $this->db->prepare("INSERT into cena (cena_id, datum_aktivacije_at) values (:cena, :datum_aktivacije)");
         $result = $statement->execute(array(
             ':cena' => $cena,
             ':datum_aktivacije' => date('Y-m-d')

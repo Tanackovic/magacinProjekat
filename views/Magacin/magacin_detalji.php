@@ -26,8 +26,8 @@ require 'views/dashboard/header.php';
             <th scope="row"><?php echo $i++; ?></th>
             <td><?php echo $prostorija['prostorija_broj'] ?></td>
             <td>
-                <a class="btn btn-warning" href="<?php echo URL; ?>prostorija/prostorijaDetalji/<?php echo $prostorija['id']; ?>">Detalji</a>
-                <a class="btn btn-danger" href="<?php echo URL; ?>prostorija/izmenaProstorije/<?php echo $prostorija['id']; ?>">Izmeni</a>
+                <a class="btn btn-warning" href="<?php echo URL; ?>prostorija/prostorijaDetalji/<?php echo $prostorija['prostorija_id']; ?>">Detalji</a>
+                <a class="btn btn-danger" href="<?php echo URL; ?>prostorija/izmenaProstorije/<?php echo $prostorija['prostorija_id']; ?>">Izmeni</a>
             </td>
         </tr>
         <?php

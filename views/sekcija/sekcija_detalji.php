@@ -36,7 +36,7 @@ require 'views/dashboard/header.php';
                 <th scope="row"><?php echo $i++; ?></th>
                 <td><?php echo $roba['naziv'] ?></td>
                 <td><?php echo $roba['vrsta_robe'] ?></td> 
-                <td><?php echo $roba['datum_evidentiranja'] ?></td>
+                <td><?php echo date('d/m/Y', strtotime($roba['datum_evidentiranja_at'])) ?></td>
                 <td><?php echo $roba['kolicina'] ?></td>  
             </tr>
             <?php
@@ -45,7 +45,7 @@ require 'views/dashboard/header.php';
         </tbody>
     </table>
 </div>
-<a href="<?php echo URL;?>red/redDetalji/<?php echo $this->sekcija->red->id;?>" class="btn btn-info">Vrati se na policu</a>
+<a href="<?php echo URL;?>red/redDetalji/<?php echo $this->sekcija->red->id;?>" class="btn btn-info">Vrati se na red</a>
 <br/>
 <?php
 require 'views/dashboard/footer.php';

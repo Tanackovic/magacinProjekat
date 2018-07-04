@@ -64,7 +64,7 @@ require 'views/dashboard/header.php';
         ?>    
             <tr> 
                 <th scope="row"><?php echo $i++; ?></th>    
-                <td><?php echo date('d/m/Y', strtotime($istorija['datum_unosa'])); ?></td>
+                <td><?php echo date('d/m/Y', strtotime($istorija['datum_unosa_at'])); ?></td>
                 <td><?php echo $istorija['adr_kod_start'] ?></td>            
                 <td><?php echo $istorija['adr_kod_kraj'] ?></td>
                 <td><?php echo $istorija['ime'] . ' ' . $istorija['prezime'] ?></td>

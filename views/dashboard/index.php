@@ -30,10 +30,10 @@ require 'views/dashboard/header.php';
                                 <td><img src="<?php echo URL; ?>libs/Barcode.php?$code_type=code128&text=<?php echo $roba['barkod']; ?>&print=true" height="90" width="180" alt="barcode"/></td>
                                 <td><?php echo $roba['ime_prezime']; ?></td>
                                 <td>
-                                    <a class="btn btn-info" href="<?php echo URL; ?>roba/robaDetalji/<?php echo $roba['id']; ?>">Detalji</a>
-                                    <a class="btn btn-success" href="<?php echo URL; ?>roba/prijemniList/<?php echo $roba['id']; ?>">Prijemni list</a>
-                                    <a class="btn btn-warning" href="<?php echo URL; ?>roba/prebaciRobu/<?php echo $roba['id']; ?>">Prebaci robu</a>
-                                    <a class="btn btn-danger" href="<?php echo URL; ?>roba/iznesiRobu/<?php echo $roba['id']; ?>">Izlaz robe</a>
+                                    <a class="btn btn-info" href="<?php echo URL; ?>roba/robaDetalji/<?php echo $roba['roba_id']; ?>">Detalji</a>
+                                    <a class="btn btn-success" href="<?php echo URL; ?>roba/prijemniList/<?php echo $roba['roba_id']; ?>">Prijemni list</a>
+                                    <a class="btn btn-warning" href="<?php echo URL; ?>roba/prebaciRobu/<?php echo $roba['roba_id']; ?>">Prebaci robu</a>
+                                    <a class="btn btn-danger" href="<?php echo URL; ?>roba/iznesiRobu/<?php echo $roba['roba_id']; ?>">Izlaz robe</a>
                                 </td>
                             </tr>
                             <?php

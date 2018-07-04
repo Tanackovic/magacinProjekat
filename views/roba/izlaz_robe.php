@@ -55,8 +55,8 @@ require 'views/dashboard/header.php';
             foreach ($this->roba->istorija_promena as $istorija) {
         ?>    
             <tr>     
-                <td><?php echo date('d/m/Y', strtotime($istorija['datum_unosa'])); ?></td>
-                <td><?php echo (date('d/m/Y', strtotime($istorija['datum_izlaska'])) === '01/01/1970')? "":date('d/m/Y', strtotime($istorija['datum_izlaska'])); ?></td>            
+                <td><?php echo date('d/m/Y', strtotime($istorija['datum_unosa_at'])); ?></td>
+                <td><?php echo (date('d/m/Y', strtotime($istorija['datum_izlaska_at'])) === '01/01/1970')? "":date('d/m/Y', strtotime($istorija['datum_izlaska_at'])); ?></td>            
                 <td><?php echo $istorija['adr_kod_start'] ?></td>            
                 <td><?php echo $istorija['adr_kod_kraj'] ?></td>
                 <td><?php echo $istorija['ime'] . ' ' . $istorija['prezime'] ?></td>

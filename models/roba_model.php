@@ -35,7 +35,7 @@ class Roba_model extends Model {
         $this->db->beginTransaction();
         Session::init();
         $logId = Session::get('loggedIn_id');
-        $statement = $this->db->prepare("INSERT into roba ( osoba_id, datum_evidentiranja, vrsta_robe, naziv, sekcija_id, kolicina, roba_status) "
+        $statement = $this->db->prepare("INSERT into roba ( osoba_id, datum_evidentiranja_at, vrsta_robe, naziv, sekcija_id, kolicina, is_aktivna) "
                 . "values ( :osoblje_id, :datum_evidentiranja, :vrsta_robe, :naziv, :sekcija_id, :kolicina, :roba_status)");
         $result = $statement->execute(array(
             ':osoblje_id' => $logId,
@@ -50,7 +50,7 @@ class Roba_model extends Model {
         if ($result == 1) {
             $inserted = $this->db->lastInsertId();
             $bar_code_data = "barcode-roba-" . $inserted;
-            $statement = $this->db->prepare("update roba set barkod = :barkod where id = :roba_id");
+            $statement = $this->db->prepare("update roba set barkod = :barkod where roba_id = :roba_id");
             $result1 = $statement->execute(array(
                 ':barkod' => $bar_code_data,
                 ':roba_id' => $inserted
@@ -72,7 +72,7 @@ class Roba_model extends Model {
 
     function kreirajPrijemniList($roba_id) {
         $delovodniBroj = "pl-roba-" . $roba_id;
-        $statement = $this->db->prepare("INSERT into prijemni_list (delovodni_broj, datum, roba_id) "
+        $statement = $this->db->prepare("INSERT into prijemni_list (delovodni_broj, datum_at, roba_id) "
                 . "values ( :delovodni_broj, :datum, :roba_id)");
         $result = $statement->execute(array(
             ':delovodni_broj' => $delovodniBroj,
@@ -87,16 +87,13 @@ class Roba_model extends Model {
     }
 
     function prijemniList($id) {
-        $statement = $this->db->prepare("SELECT pl.*, s.id as sekcija_id, s.sekcija_broj, m.id as magacin_id, "
-                . "m.magacin_naziv, m.adresa, p.id as prostorija_id, p.prostorija_broj, po.id as polica_id, "
-                . "po.polica_broj, r.id as red_id, r.red_broj, ro.id as roba_id, ro.naziv, ro.vrsta_robe, "
-                . "ro.datum_evidentiranja, ro.kolicina, ro.barkod "
-                . " FROM prijemni_list pl join roba ro on pl.roba_id = ro.id "
-                . "join sekcija s on s.id = ro.sekcija_id "
-                . "join red r on r.id = s.red_id "
-                . "join polica po on po.id = r.polica_id "
-                . "join prostorija p on po.prostorija_id = p.id "
-                . "JOIN magacin m ON p.magacin_id = m.id "
+        $statement = $this->db->prepare("SELECT * "
+                . "FROM prijemni_list pl join roba ro on pl.roba_id = ro.roba_id "
+                . "join sekcija s on s.sekcija_id = ro.sekcija_id "
+                . "join red r on r.red_id = s.red_id "
+                . "join polica po on po.polica_id = r.polica_id "
+                . "join prostorija p on po.prostorija_id = p.prostorija_id "
+                . "JOIN magacin m ON p.magacin_id = m.magacin_id "
                 . "WHERE pl.roba_id = :id ");
         $statement->execute(array(
             ':id' => $id
@@ -119,10 +116,10 @@ class Roba_model extends Model {
         $this->roba_id = $red['roba_id'];
         $this->roba_naziv = $red['naziv'];
         $this->roba_vrsta = $red['vrsta_robe'];
-        $this->roba_datum_evidentiranja = $red['datum_evidentiranja'];
+        $this->roba_datum_evidentiranja = $red['datum_evidentiranja_at'];
         $this->roba_kolicina = $red['kolicina'];
         $this->prijemni_list_db = $red['delovodni_broj'];
-        $this->prijemni_list_datum = $red['datum'];
+        $this->prijemni_list_datum = $red['datum_at'];
         $this->roba_barkod = $red['barkod'];
 
         return $this;
@@ -131,7 +128,7 @@ class Roba_model extends Model {
     function zapamtiUIstoriji($inserted, $sekcija_start, $sekcija_kraj) {
         Session::init();
         $logId = Session::get('loggedIn_id');
-        $statement = $this->db->prepare("SELECT * from istorija_premestanja where roba_id= :roba_id  AND datum_izlaska IS NULL");
+        $statement = $this->db->prepare("SELECT * from istorija_premestanja where roba_id= :roba_id  AND datum_izlaska_at IS NULL");
         $result = $statement->execute(array(
             ':roba_id' => $inserted
         ));
@@ -139,21 +136,20 @@ class Roba_model extends Model {
             $red = $statement->fetch();
             $count = $statement->rowCount();
             if ($count > 0) {
-                $istorija_id = $red['id'];
+                $istorija_id = $red['istorija_premestanja_id'];
                 $to = date_create(date('Y-m-d'));
-                $from = date_create($red['datum_unosa']);
+                $from = date_create($red['datum_unosa_at']);
                 $diff = date_diff($from, $to);
                 $statement = $this->db->prepare("UPDATE istorija_premestanja "
-                        . "set datum_izlaska = :datum, vreme_lezanja_u_danima = :vreme_lezanja "
-                        . "where id= :istorija_id");
+                        . "set datum_izlaska_at = :datum, vreme_lezanja_u_danima = :vreme_lezanja "
+                        . "where istorija_premestanja_id= :istorija_id");
                 $result = $statement->execute(array(
                     ':datum' => $to->format('Y-m-d'),
                     ':vreme_lezanja' => $diff->format('%a') + 1,
                     ':istorija_id' => $istorija_id
                 ));
-               // return $inserted;
             } 
-            $statement = $this->db->prepare("INSERT into istorija_premestanja (roba_id, datum_unosa, osoba_id, sekcija_start_id, sekcija_kraj_id) "
+            $statement = $this->db->prepare("INSERT into istorija_premestanja (roba_id, datum_unosa_at, osoba_id, sekcija_start_id, sekcija_kraj_id) "
                     . "values ( :roba_id, :datum, :osoblje_id, :sekcija_start_id, :sekcija_kraj_id)");
             $result = $statement->execute(array(
                 ':roba_id' => $inserted,
@@ -163,7 +159,7 @@ class Roba_model extends Model {
                 ':sekcija_kraj_id' => $sekcija_kraj,
             ));
 
-            $statement = $this->db->prepare("UPDATE roba set sekcija_id = :sekcija_id where id=:roba_id");
+            $statement = $this->db->prepare("UPDATE roba set sekcija_id = :sekcija_id where roba_id=:roba_id");
             $result = $statement->execute(array(
                 ':sekcija_id' => $sekcija_kraj,
                 ':roba_id' => $inserted
@@ -178,12 +174,12 @@ class Roba_model extends Model {
     function robaDetalji($id) {
         $this->detalji = $this->prijemniList($id);
         $statement = $this->db->prepare("SELECT ip.*, s1.`sekcija_adresni_kod` AS adr_kod_start, s2.`sekcija_adresni_kod` AS adr_kod_kraj, o.`ime`,o.`prezime`
-                        FROM istorija_premestanja ip JOIN roba r ON r.id=ip.roba_id
-                        JOIN osoba o ON ip.osoba_id = o.id
-                        JOIN sekcija s1 ON ip.`sekcija_start_id` = s1.`id`
-                        JOIN sekcija s2 ON ip.`sekcija_kraj_id` = s2.`id`
+                        FROM istorija_premestanja ip JOIN roba r ON r.roba_id=ip.roba_id
+                        JOIN osoba o ON ip.osoba_id = o.osoba_id
+                        JOIN sekcija s1 ON ip.`sekcija_start_id` = s1.`sekcija_id`
+                        JOIN sekcija s2 ON ip.`sekcija_kraj_id` = s2.`sekcija_id`
                         WHERE ip.roba_id= :roba_id
-                        order by ip.datum_unosa desc");
+                        order by ip.datum_unosa_at desc");
         $result = $statement->execute(array(
             ':roba_id' => $id
         ));
@@ -192,7 +188,7 @@ class Roba_model extends Model {
     }
 
     function otpremniList($id) {
-        $statement = $this->db->prepare("SELECT delovodni_broj, datum  from prijemni_list where roba_id = :roba_id ");
+        $statement = $this->db->prepare("SELECT delovodni_broj, datum_at  from prijemni_list where roba_id = :roba_id ");
         $result = $statement->execute(array(
             ':roba_id' => $id
         ));
@@ -200,11 +196,11 @@ class Roba_model extends Model {
         $delovodniBroj = "otprema-roba-" . $id;
         $pl_delovodni_broj = $statement->fetch();
         $to = date_create(date('Y-m-d'));
-        $from = date_create($pl_delovodni_broj['datum']);
+        $from = date_create($pl_delovodni_broj['datum_at']);
         $diff = date_diff($from, $to);
 
 
-        $statement = $this->db->prepare("INSERT INTO otpremni_list (delovodni_broj_otpremnice, delovodni_broj_prijemnog_lista, datum, roba_id, vreme_lezanja_u_danima)"
+        $statement = $this->db->prepare("INSERT INTO otpremni_list (delovodni_broj_otpremnice, delovodni_broj_prijemnog_lista, datum_at, roba_id, vreme_lezanja_u_danima)"
                 . " values (:delovodni_broj_otpremnice, :delovodni_broj_prijemnog_list, :datum, :roba_id, :vreme_lezanja)");
         $result = $statement->execute(array(
             ':delovodni_broj_otpremnice' => $delovodniBroj,
@@ -215,12 +211,12 @@ class Roba_model extends Model {
         ));
         $inserted = $this->db->lastInsertId();
         $statement = $this->db->prepare("SELECT ip.*, s1.`sekcija_adresni_kod` AS adr_kod_start, s2.`sekcija_adresni_kod` AS adr_kod_kraj, o.`ime`,o.`prezime`
-                        FROM istorija_premestanja ip JOIN roba r ON r.id=ip.roba_id
-                        JOIN osoba o ON ip.osoba_id = o.id
-                        JOIN sekcija s1 ON ip.`sekcija_start_id` = s1.`id`
-                        JOIN sekcija s2 ON ip.`sekcija_kraj_id` = s2.`id`
+                        FROM istorija_premestanja ip JOIN roba r ON r.roba_id=ip.roba_id
+                        JOIN osoba o ON ip.osoba_id = o.osoba_id
+                        JOIN sekcija s1 ON ip.`sekcija_start_id` = s1.`sekcija_id`
+                        JOIN sekcija s2 ON ip.`sekcija_kraj_id` = s2.`sekcija_id`
                         WHERE ip.roba_id= :roba_id
-                        order by ip.datum_unosa desc");
+                        order by ip.datum_unosa_at desc");
         $result = $statement->execute(array(
             ':roba_id' => $id
         ));
@@ -231,7 +227,7 @@ class Roba_model extends Model {
                     . "values (:otpremnica_id, :istorija_id, :adr_kod_start, :adr_kod_kraj, :ime, :prezime)");
             $result = $statement->execute(array(
                 ':otpremnica_id' => $inserted,
-                ':istorija_id' => $stavka['id'],
+                ':istorija_id' => $stavka['istorija_premestanja_id'],
                 ':adr_kod_start' => $stavka['adr_kod_start'],
                 ':adr_kod_kraj' => $stavka['adr_kod_kraj'],
                 ':ime' => $stavka['ime'],
@@ -239,17 +235,17 @@ class Roba_model extends Model {
             ));
         }
 
-        $statement = $this->db->prepare("UPDATE roba set roba_status = 0 where id = :roba_id");
+        $statement = $this->db->prepare("UPDATE roba set is_aktivna = 0 where roba_id = :roba_id");
         $result = $statement->execute(array(
             ':roba_id' => $id
         ));
-        $this->napraviPredracun($inserted, $pl_delovodni_broj['datum'], date('Y-m-d'));
+        $this->napraviPredracun($inserted, $pl_delovodni_broj['datum_at'], date('Y-m-d'));
         header('location: ../../otpremnica/otpremnicaDetalji/' . $inserted);
     }
 
     function napraviPredracun($id_otpremnice, $datum_ulaza, $datum_izlaza) {
 
-        $statement = $this->db->prepare("INSERT into predracun (datum, otpremnica_id, totalna_suma, broj_dana) values "
+        $statement = $this->db->prepare("INSERT into predracun (datum_at, otpremnica_id, totalna_suma, broj_dana) values "
                 . "(:datum, :otpremnica_id, :totalna_suma, :broj_dana)");
         $statement->execute(array(
             ':datum' => date('Y-m-d'),
@@ -263,19 +259,19 @@ class Roba_model extends Model {
         $statement = $this->db->prepare("
             SELECT 1 AS broj, c.* 
             FROM cena c
-            WHERE c.datum_aktivacije<:datum_ulaza AND (c.datum_deaktivacije>:datum_deaktivacije OR c.datum_deaktivacije IS NULL)
+            WHERE c.datum_aktivacije_at<:datum_ulaza AND (c.datum_deaktivacije_at>:datum_deaktivacije OR c.datum_deaktivacije_at IS NULL)
             UNION ALL
 	    SELECT 2 AS broj, c.* 
             FROM cena c
-            WHERE  c.datum_aktivacije<=:datum_ulaza  AND c.datum_deaktivacije<=:datum_deaktivacije AND c.datum_deaktivacije>=:datum_ulaza
+            WHERE  c.datum_aktivacije_at<=:datum_ulaza  AND c.datum_deaktivacije_at<=:datum_deaktivacije AND c.datum_deaktivacije_at>=:datum_ulaza
             UNION ALL
             SELECT 3 AS broj, c.* 
             FROM cena c
-            WHERE c.datum_aktivacije>:datum_ulaza AND c.datum_deaktivacije<:datum_deaktivacije
+            WHERE c.datum_aktivacije_at>:datum_ulaza AND c.datum_deaktivacije_at<:datum_deaktivacije
             UNION ALL
             SELECT 4 AS broj, c.* 
             FROM cena c
-            WHERE :datum_deaktivacije >= c.datum_aktivacije AND :datum_ulaza < c.datum_aktivacije AND c.datum_deaktivacije IS NULL
+            WHERE :datum_deaktivacije >= c.datum_aktivacije_at AND :datum_ulaza < c.datum_aktivacije_at AND c.datum_deaktivacije_at IS NULL
         ");
         $statement->execute(array(
             ':datum_ulaza' => $datum_ulaza,
@@ -289,7 +285,7 @@ class Roba_model extends Model {
             if ($cena['broj'] == 1) {
                 $from = date_create($datum_ulaza);
                 $to = date_create($datum_izlaza);
-                $datum_od = $cena['datum_aktivacije'];
+                $datum_od = $cena['datum_aktivacije_at'];
                 $datum_do = $datum_izlaza;
                 $diff = date_diff($from, $to);
                 $noviDani = floatval($diff->format('%a')) + 1;
@@ -298,28 +294,28 @@ class Roba_model extends Model {
                 $cena1 += $total_za_dane;
             } else if ($cena['broj'] == 2) {
                 $from = date_create($datum_ulaza);
-                $to = date_create($cena['datum_deaktivacije']);
+                $to = date_create($cena['datum_deaktivacije_at']);
                 $datum_od = $datum_ulaza;
-                $datum_do = $cena['datum_deaktivacije'];
+                $datum_do = $cena['datum_deaktivacije_at'];
                 $diff = date_diff($from, $to);
                 $noviDani = floatval($diff->format('%a')) + 1;
                 $total_za_dane = $noviDani * floatval($cena['cena']);
                 $dani += $noviDani;
                 $cena1 += $total_za_dane;
             } else if ($cena['broj'] == 3) {
-                $from = date_create($cena['datum_aktivacije']);
-                $to = date_create($cena['datum_deaktivacije']);
-                $datum_od = $cena['datum_aktivacije'];
-                $datum_do = $cena['datum_deaktivacije'];
+                $from = date_create($cena['datum_aktivacije_at']);
+                $to = date_create($cena['datum_deaktivacije_at']);
+                $datum_od = $cena['datum_aktivacije_at'];
+                $datum_do = $cena['datum_deaktivacije_at'];
                 $diff = date_diff($from, $to);
                 $noviDani = floatval($diff->format('%a')) + 1;
                 $total_za_dane = $noviDani * floatval($cena['cena']);
                 $dani += $noviDani;
                 $cena1 += $total_za_dane;
             } else if ($cena['broj' == 4]) {
-                $from = date_create($cena['datum_aktivacije']);
+                $from = date_create($cena['datum_aktivacije_at']);
                 $to = date_create($datum_izlaza);
-                $datum_od = $cena['datum_aktivacije'];
+                $datum_od = $cena['datum_aktivacije_at'];
                 $datum_do = $datum_izlaza;
                 $diff = date_diff($from, $to);
                 $noviDani = floatval($diff->format('%a')) + 1;
@@ -329,7 +325,7 @@ class Roba_model extends Model {
             }
 
             $statement = $this->db->prepare("INSERT into stavka_predracuna 
-                (datum_od, datum_do, predracun_id, cena_po_danu, total_cena_za_dane, broj_dana)
+                (datum_od_at, datum_do_at, predracun_id, cena_po_danu, total_cena_za_dane, broj_dana)
                 values 
                 (:datum_od, :datum_do, :predracun_id, :cena_po_danu,:total_cena_za_dane, :broj_dana)");
             $statement->execute(array(
@@ -344,7 +340,7 @@ class Roba_model extends Model {
         $jedinstveni_broj = 'predracun_' . date('Y-m-d') . '_' . $inserted;
         $statement = $this->db->prepare("Update predracun 
                 set  totalna_suma=:totalna_suma, broj_dana=:broj_dana, jedinstveni_broj= :jedinstveni_broj
-                where id = :id");
+                where predracun_id = :id");
         $statement->execute(array(
             ':totalna_suma' => $cena1,
             ':broj_dana' => $dani,

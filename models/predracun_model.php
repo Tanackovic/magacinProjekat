@@ -11,7 +11,7 @@ class Predracun_model extends Model {
 
     function index() {
         $statement = $this->db->prepare("SELECT p.*, o.delovodni_broj_otpremnice from predracun p 
-                 join otpremni_list o on p.otpremnica_id = o.id");
+                 join otpremni_list o on p.otpremnica_id = o.otpremni_list_id");
         $statement->execute();
         if ($statement->rowCount() > 0) {
             $this->predracuni = $statement->fetchAll();
@@ -23,8 +23,8 @@ class Predracun_model extends Model {
 
     function predracunDetalji($id) {
         $statement = $this->db->prepare("SELECT p.*, o.delovodni_broj_otpremnice from predracun p 
-                 join otpremni_list o on p.otpremnica_id = o.id 
-                 where p.id = :id");
+                 join otpremni_list o on p.otpremnica_id = o.otpremni_list_id 
+                 where p.predracun_id = :id");
         $result = $statement->execute(array(
             ':id' => $id
         ));
