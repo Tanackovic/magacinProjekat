@@ -23,8 +23,8 @@ class Magacin extends MainController {
     function dodajNoviMagacin() {
         $naziv = filter_input(INPUT_POST, 'naziv');
         $adresa = filter_input(INPUT_POST, 'adresa');
-        if (!empty($naziv) && !empty($adresa)) {
-            
+        $stringValidator = new Field((new StringValidator())->setMinLength(3));
+        if ($stringValidator->isValid($naziv) && $stringValidator->isValid($adresa)) {
             $result = $this->model->dodajNoviMagacin($naziv, $adresa);
             if ($result == 1) {
                 $this->index();
@@ -62,7 +62,9 @@ class Magacin extends MainController {
         $magacin_id = filter_input(INPUT_POST, 'magacin_id');
         $naziv = filter_input(INPUT_POST, 'naziv');
         $adresa = filter_input(INPUT_POST, 'adresa');
-        if (!empty($naziv) && !empty($adresa) && !empty($magacin_id)) {
+        $stringValidator = new Field((new StringValidator())->setMinLength(3));
+        $numberValidator = new Field((new NumberValidator())->setInteger());
+        if ($stringValidator->isValid($naziv) && $stringValidator->isValid($adresa) && $numberValidator->isValid($magacin_id)) {
             
             $result = $this->model->izmeniMagacin($magacin_id, $naziv, $adresa);
             if ($result == 1) {

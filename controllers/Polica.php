@@ -14,7 +14,8 @@ class Polica extends MainController {
     function dodajNovuPolicu() {
         $prostorija_id = filter_input(INPUT_POST, 'prostorija_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($prostorija_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($prostorija_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->dodajNovuPolicu($prostorija_id, $broj);
             if($result == 0){
                 $this->view->message = 'Doslo je do greske pri upisu police';
@@ -52,7 +53,8 @@ class Polica extends MainController {
     function izmeniPolicu(){
         $polica_id = filter_input(INPUT_POST, 'polica_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($polica_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($polica_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->izmeniPolicu($polica_id, $broj);
             if($result == 0){
                 $this->view->message = 'Doslo je do greske pri izmeni police';

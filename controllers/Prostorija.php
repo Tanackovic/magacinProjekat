@@ -14,7 +14,8 @@ class Prostorija extends MainController {
     function dodajNovuProstoriju() {
         $magacin_id = filter_input(INPUT_POST, 'magacin_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($magacin_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($magacin_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->dodajNovuProstoriju($magacin_id, $broj);
             if ($result == 0) {
                 $this->view->message = 'Doslo je do greske pri upisu prostorije';
@@ -52,7 +53,8 @@ class Prostorija extends MainController {
     function izmeniProstoriju(){
         $prostorija_id = filter_input(INPUT_POST, 'prostorija_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($prostorija_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($prostorija_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->izmeniProstoriju($prostorija_id, $broj);
             if ($result == 0) {
                 $this->view->message = 'Doslo je do greske pri upisu prostorije';

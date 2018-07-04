@@ -21,9 +21,9 @@ class Cena extends MainController {
     }
 
     function promeniCenuCuvanja() {
-        $cena = doubleval(filter_input(INPUT_POST, 'cena')); 
-        $regex = '^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?$^';
-        if (!empty($cena) && preg_match($regex, $cena) && $cena>0) {         
+        $cena = doubleval(filter_input(INPUT_POST, 'cena'));
+        $cenaValidator = new Field((new NumberValidator())->setDecimal());
+        if ($cenaValidator->isValid($cena)) { 
             $result = $this->model->promeniCenu($cena);
             if ($result > 0) {
                 $this->index();
@@ -40,7 +40,8 @@ class Cena extends MainController {
     function dodajCenu() {
 
         $cena = doubleval(filter_input(INPUT_POST, 'cena'));     
-        if (!empty($cena)) {  
+        $this->numberValidator->setDecimal();
+        if ($this->numberValidator->isValid($cena)) {
             $result = $this->model->dodajCenu($cena);
             if ($result > 0) {
                 $this->index();

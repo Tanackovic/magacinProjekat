@@ -14,7 +14,8 @@ class Red extends MainController {
     function dodajNoviRed() {
         $polica_id = filter_input(INPUT_POST, 'polica_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($polica_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($polica_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->dodajNoviRed($polica_id, $broj);
             if ($result == 0) {
                 $this->view->message = 'Doslo je do greske pri upisu reda';
@@ -52,7 +53,8 @@ class Red extends MainController {
     function izmeniRed(){
         $red_id = filter_input(INPUT_POST, 'red_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($red_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($red_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->izmeniRed($red_id, $broj);
             if ($result == 0) {
                 $this->view->message = 'Doslo je do greske pri upisu reda';

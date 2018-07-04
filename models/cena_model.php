@@ -47,7 +47,7 @@ class Cena_model extends Model {
             }
         }else{
             $statement = $this->db->prepare("UPDATE cena 
-            SET cena_id= :cena
+            SET cena= :cena
             WHERE datum_aktivacije_at = :datum_aktivacije");
             $result_update = $statement->execute(array(
                 ':cena' => $cena,

@@ -3,6 +3,8 @@
     require 'libs/Controller.php';
     require 'libs/View.php';
     require 'libs/Model.php';
+    require 'libs/Validator.php';
+    require 'libs/Field.php';
     
     
     //Libs

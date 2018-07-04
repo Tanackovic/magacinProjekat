@@ -33,8 +33,10 @@ class Osoba extends MainController {
         $korisnicko_ime = filter_input(INPUT_POST, 'korisnicko_ime');
         $password = filter_input(INPUT_POST, 'password');
         $uloga = filter_input(INPUT_POST, 'uloga');
-        if (!empty($ime) && !empty($prezime) &&
-                !empty($korisnicko_ime) && !empty($password) && !empty($uloga) && $uloga != 0) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(3));
+        $passwordValidator = new Field((new StringValidator())->setMinLength(6));
+        if ($stringValidator->isValid($ime) && $stringValidator->isValid($prezime) && $stringValidator->isValid($korisnicko_ime) 
+                && $passwordValidator->isValid($password) && $uloga != 0) {            
             $result = $this->model->DodajNovuOsobu($ime, $prezime, $korisnicko_ime, $password, $uloga);
             if ($result == 1) {
                 $this->index();

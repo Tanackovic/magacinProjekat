@@ -25,8 +25,9 @@ class Login extends MainController {
     function loginIn($arg = false) {
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
-        $regex = "/^.{6,}$/";
-        if (preg_match($regex, $password)) {
+        $usernameValidator = new Field(new StringValidator());
+        $passwordValidator = new Field((new StringValidator())->setMinLength(6));
+        if ($usernameValidator->isValid($username) && $passwordValidator->isValid($password)) {
             $result = $this->model->login($username, $password);
             if ($result == 1) {
                 header('location: ../dashboard/index');
@@ -34,5 +35,4 @@ class Login extends MainController {
         }
         header('location: ../');
     }
-
 }

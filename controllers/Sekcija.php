@@ -14,7 +14,8 @@ class Sekcija extends MainController
     function dodajNovuSekciju(){
         $red_id = filter_input(INPUT_POST, 'red_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($red_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($red_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->dodajNovuSekciju($red_id, $broj);
             if ($result == 0) {
                 $this->view->message = 'Doslo je do greske pri upisu sekcije';
@@ -52,7 +53,8 @@ class Sekcija extends MainController
     function izmeniSekciju(){
         $sekcija_id = filter_input(INPUT_POST, 'sekcija_id');
         $broj = filter_input(INPUT_POST, 'broj');
-        if (!empty($sekcija_id) && !empty($broj)) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        if (!empty($sekcija_id) && $stringValidator->isValid($broj)) {            
             $result = $this->model->izmeniSekciju($sekcija_id, $broj);
             if ($result == 0) {
                 $this->view->message = 'Doslo je do greske pri upisu sekcije';

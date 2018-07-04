@@ -2,8 +2,11 @@
 
 class MainController
 {
+    
     function __construct() {
         $this->view = new View();
+        require 'Validators/NumberValidator.php';
+        require 'Validators/StringValidator.php';
     }
     
     function loadModel($name){

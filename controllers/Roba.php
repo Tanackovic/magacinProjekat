@@ -14,10 +14,12 @@ class Roba extends MainController {
     function dodajNovuRobu() {
         $naziv = filter_input(INPUT_POST, 'naziv');
         $kolicina = filter_input(INPUT_POST, 'kolicina');
-        
         $sekcija = filter_input(INPUT_POST, 'sekcija');
         $vrsta_robe = filter_input(INPUT_POST, 'vrsta_robe');
-        if (!empty($naziv) && !empty($kolicina) && !empty($sekcija) && !empty($vrsta_robe) && $sekcija != 0 ) {            
+        $stringValidator = new Field((new StringValidator())->setMinLength(1));
+        $kolicinaValidator = new Field((new NumberValidator())->setInteger());
+        if ($stringValidator->isValid($naziv) && $kolicinaValidator->isValid($kolicina) && !empty($sekcija) 
+                && $stringValidator->isValid($vrsta_robe) && $sekcija != 0 ) {            
             $result = $this->model->dodajNovuRobu($naziv, $kolicina, $sekcija, $vrsta_robe);
             if ($result != 0) {
                 header('location: ../roba/prijemniList/' . $result);
